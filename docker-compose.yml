@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  frontend_libreria:
+    build: ./libreria-frontend
+    container_name: libreria-frontend
+    ports:
+      - "4200:4200"
+
+    depends_on:
+      - api_libreria
+  
+  api_libreria:
+    
+    build: ./api_libreria
+    container_name: app_libreria
+    depends_on:
+      - db_libreria
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db_libreria:5433/libreria
+      - SPRING_DATASOURCE_USERNAME=cevens
+      - SPRING_DATASOURCE_PASSWORD=cevens
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - 8080:8080
+
+  db_libreria:
+    image: postgres:13.1-alpine
+    
+    container_name: db_libreria
+
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - APP_DB_USER=cevens
+      - APP_DB_PASS=cevens
+      - APP_DB_NAME=libreria
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
+    expose:
+      - "5433"
+    ports:
+      - "5433:5433"
+    command: -p 5433
