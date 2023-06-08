@@ -18,11 +18,11 @@ services:
       - db_libreria
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db_libreria:5433/libreria
-      - SPRING_DATASOURCE_USERNAME=cevens
-      - SPRING_DATASOURCE_PASSWORD=cevens
+      - SPRING_DATASOURCE_USERNAME=libreria
+      - SPRING_DATASOURCE_PASSWORD=libreria
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
-      - 8080:8080
+      - "8080:8080"
 
   db_libreria:
     image: postgres:13.1-alpine
@@ -38,8 +38,8 @@ services:
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=password
-      - APP_DB_USER=cevens
-      - APP_DB_PASS=cevens
+      - APP_DB_USER=libreria
+      - APP_DB_PASS=libreria
       - APP_DB_NAME=libreria
     volumes:
       - ./db:/docker-entrypoint-initdb.d/
